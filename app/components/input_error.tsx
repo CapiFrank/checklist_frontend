@@ -13,7 +13,7 @@ const InputError: FC<InputErrorProps> = ({
   if (!message) return null;
 
   return (
-    <p {...props} className={`text-sm text-red-600 ${className}`}>
+    <p {...props} className={`text-sm text-red-600 break-words whitespace-pre-wrap ${className}`}>
       {message}
     </p>
   );

@@ -9,12 +9,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InputLabel from "./input_label";
 import TextInput from "./text_input";
 import { useTasks } from "~/contexts/task_context";
+import { usePage } from "~/contexts/page_context";
+import { useAuth } from "~/contexts/auth_context";
+import Swal from "sweetalert2";
+
 type NavbarProps = {
   onToggle: (value: boolean) => void;
   isOpen: boolean;
 };
 const Navbar = ({ onToggle, isOpen }: NavbarProps) => {
   const { setSearchTerm } = useTasks();
+  const { setEditingMode, isEditingMode } = usePage();
+  const { logout } = useAuth();
   return (
     <div className="w-full h-full flex justify-between">
       <button
@@ -25,22 +31,35 @@ const Navbar = ({ onToggle, isOpen }: NavbarProps) => {
       </button>
       <div className="flex items-center gap-4">
         <InputLabel>Buscar:</InputLabel>
-        <TextInput onChange={(event) => setSearchTerm(event.target.value)}></TextInput>
+        <TextInput
+          onChange={(event) => setSearchTerm(event.target.value)}
+        ></TextInput>
       </div>
       <div className="self-center flex h-full items-center">
-        <div className="flex flex-col place-content-center cursor-pointer w-full px-4 h-full hover:bg-gray-200 active:bg-gray-300" title="Gestión del usuario">
+        <div
+          className="flex flex-col place-content-center cursor-pointer w-full px-4 h-full hover:bg-gray-200 active:bg-gray-300"
+          title="Gestión del usuario"
+        >
           <FontAwesomeIcon icon={faCircleUser} id="user" className="text-2xl" />
           <InputLabel htmlFor="user" className="cursor-pointer">
             Usuario
           </InputLabel>
         </div>
-        <div className="flex flex-col place-content-center cursor-pointer w-full px-6 h-full hover:bg-gray-200 active:bg-gray-300" title="Modifica las categorías">
+        <div
+          onClick={() => setEditingMode(!isEditingMode)}
+          className={`flex flex-col place-content-center cursor-pointer w-full px-6 h-full hover:bg-gray-200 active:bg-gray-300 ${isEditingMode && "bg-gray-300"}`}
+          title="Modifica las categorías"
+        >
           <FontAwesomeIcon icon={faGear} id="settings" className="text-2xl" />
           <InputLabel htmlFor="settings" className="cursor-pointer">
             Configurar
           </InputLabel>
         </div>
-        <div className="flex flex-col place-content-center cursor-pointer w-full px-6 h-full hover:bg-gray-200 active:bg-gray-300" title="Cerrar sesión">
+        <div
+          className="flex flex-col place-content-center cursor-pointer w-full px-6 h-full hover:bg-gray-200 active:bg-gray-300"
+          title="Cerrar sesión"
+          onClick={logout}
+        >
           <FontAwesomeIcon
             icon={faArrowRightFromBracket}
             id="logout"

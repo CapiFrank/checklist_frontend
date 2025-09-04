@@ -16,6 +16,8 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { TaskProvider } from "./contexts/task_context";
+import { PageProvider } from "./contexts/page_context";
+import { AuthProvider } from "./contexts/auth_context";
 
 library.add(fas, far, fab);
 
@@ -52,9 +54,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <TaskProvider>
-      <Outlet />
-    </TaskProvider>
+    <AuthProvider>
+      <PageProvider>
+        <TaskProvider>
+          <Outlet />
+        </TaskProvider>
+      </PageProvider>
+    </AuthProvider>
   );
 }
 

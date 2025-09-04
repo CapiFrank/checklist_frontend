@@ -11,15 +11,16 @@ import TextArea from "./text_area";
 import TextInput from "./text_input";
 import { useTasks } from "~/contexts/task_context";
 import { useEffect, useState, type FormEventHandler } from "react";
+import Swal from "sweetalert2";
 
 const ToolPanel = () => {
-  const { selectedTask, upsertTask } = useTasks();
+  const { selectedTask, upsertTask, selectedPageId } = useTasks();
   const [title, setTitle] = useState(selectedTask?.title ?? "");
   const [note, setNote] = useState(selectedTask?.note ?? "");
   const [date, setDate] = useState(selectedTask?.date ?? null);
-  const [isMyDay, setIsMyDay] = useState(selectedTask?.isMyDay ?? false);
+  const [isMyDay, setIsMyDay] = useState(selectedTask?.is_my_day ?? false);
   const [isImportant, setIsImportant] = useState(
-    selectedTask?.isImportant ?? false
+    selectedTask?.is_important ?? false
   );
 
   // Cuando cambia la selección, sincronizamos el form
@@ -27,8 +28,8 @@ const ToolPanel = () => {
     setTitle(selectedTask?.title ?? "");
     setNote(selectedTask?.note ?? "");
     setDate(selectedTask?.date ?? null);
-    setIsMyDay(selectedTask?.isMyDay ?? false);
-    setIsImportant(selectedTask?.isImportant ?? false);
+    setIsMyDay(selectedTask?.is_my_day ?? false);
+    setIsImportant(selectedTask?.is_important ?? false);
   }, [selectedTask]);
 
   const resetForm = () => {
@@ -44,13 +45,14 @@ const ToolPanel = () => {
 
     const task = {
       ...selectedTask,
-      id: selectedTask?.id ?? "",
+      id: selectedTask?.id ?? null,
       title,
       note,
       date,
-      isImportant: isImportant,
-      isMyDay: isMyDay,
-      isScheduled: !!date,
+      is_important: isImportant,
+      is_my_day: isMyDay,
+      is_scheduled: !!date,
+      page_id: selectedPageId ?? null,
     };
 
     upsertTask(task);
